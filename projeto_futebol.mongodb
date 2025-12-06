@@ -1,0 +1,19 @@
+use('futebol_brasileiro');
+
+db.times.drop();
+db.jogadores.drop();
+db.campeonatos.drop();
+
+db.times.insertMany([
+    {_id: 1, nome: "Sport", estado: "PE", fundacao: 1905, titulos: ["Brasileirão", "Copa do Brasil"], socios: 23190},
+    {_id: 2, nome: "Palmeiras", estado: "SP", fundacao: 1914, titulos: ["Brasileirão", "Libertadores"], socios: 184712 },
+    {_id: 3, nome: "Vasco", estado: "RJ", fundacao: 1898, titulos: ["Brasileirão", "Libertadores"], socios: 44115 }
+]);
+
+db.jogadores.insertMany([
+  { nome: "Pablo", time_id: 1, posicoes: ["Atacante"], gols: 25, assistencias: 5, altura: 1.85 },
+  { nome: "Lucas Lima", time_id: 1, posicoes: ["Meio-campo", "Ponta"], gols: 12, assistencias: 15, altura: 1.75 },
+  { nome: "Victor Roque", time_id: 2, posicoes: ["Atacante", "Ponta"], gols: 10, assistencias: 4, altura: 1.66 },
+  { nome: "Veiga", time_id: 2, posicoes: ["Meio-campo"], gols: 18, assistencias: 10, altura: 1.75 },
+  { nome: "Philippe Coutinho", time_id: 3, posicoes: ["Meio-campo", "Ponta"], gols: 2, assistencias: 2, altura: 1.72 }
+]);
