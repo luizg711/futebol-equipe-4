@@ -1,9 +1,11 @@
+//1 use
 use('futebol_brasileiro');
 
 db.times.drop();
 db.jogadores.drop();
 db.campeonatos.drop();
 
+//26 save
 db.times.insertMany([
     {_id: 1, nome: "Sport", estado: "PE", fundacao: 1905, titulos: ["Brasileirão", "Copa do Brasil"], socios: 23190},
     {_id: 2, nome: "Palmeiras", estado: "SP", fundacao: 1914, titulos: ["Brasileirão", "Libertadores"], socios: 184712 },
@@ -17,3 +19,89 @@ db.jogadores.insertMany([
   { nome: "Veiga", time_id: 2, posicoes: ["Meio-campo"], gols: 18, assistencias: 10, altura: 1.75 },
   { nome: "Philippe Coutinho", time_id: 3, posicoes: ["Meio-campo", "Ponta"], gols: 2, assistencias: 2, altura: 1.72 }
 ]);
+
+db.campeonatos.insertMany([
+  { _id: 1, nome: "Brasileirão", premiacao: 50000000, organizador: "CBF", ano: 2025 },
+  { _id: 2, nome: "Copa do Brasil", premiacao: 70000000, organizador: "CBF", ano: 2025 },
+  { _id: 3, nome: "Libertadores", premiacao: 90000000, organizador: "CONMEBOL", ano: 2025 }
+]);
+
+db.jogadores.createIndex({ nome: "text", posicoes: "text" });
+
+//2 find
+db.jogadores.find({ time_id: 1 });
+
+//3 size
+db.jogadores.find({ posicoes: { $size: 2 } });
+
+//6 project
+db.jogadores.aggregate([
+  {
+    $project: {
+      _id: 0,              
+      nome_jogador: "$nome", 
+      gols: 1             
+    }
+  }
+]);
+
+//7 gte
+db.jogadores.find({ altura: { $gte: 1.75 } });
+
+//10 count
+db.jogadores.countDocuments({ time_id: 2 });
+
+//4 aggregate
+db.jogadores.aggregate([
+  {
+    // 29 lookup
+    $lookup: {
+      from: "times",
+      localField: "time_id",
+      foreignField: "_id",
+      as: "time_info"
+    }
+  },
+  {
+    // 5 match
+    $match: { gols: { $gt: 5 } }
+  },
+  {
+    // 8 group
+    $group: {
+      _id: "$time_id", 
+      // 9 sum
+      total_gols: { $sum: "$gols" },
+      // 12 avg
+      media_altura: { $avg: "$altura" },
+      //11
+      max_assist: { $max: "$assistencias" }
+    }
+  },
+  {
+    // 24 e 28 filter e cond
+    $project: {
+        total_gols: 1,
+        classificacao: {
+            $cond: { if: { $gte: ["$total_gols", 30] }, then: "Ataque Matador", else: "Ataque Comum" }
+        }
+    }
+  }
+]);
+
+//25 e 21 update e set
+db.jogadores.updateOne(
+  { nome: "Victor Roque" },
+  { $set: { altura: 1.74 } }
+);
+
+db.jogadores.updateOne(
+  { nome: "Veiga" },
+  { $set: { altura: 1.76 } }
+);
+
+//31 addtoset
+db.times.updateOne(
+  { nome: "Sport"},
+  { $addToSet: { titulos: "Brasileirão série B" } }
+);
