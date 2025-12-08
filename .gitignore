@@ -1,13 +1,13 @@
-# --- IDE e Editor (VS Code) ---
+# --- IDE e Editor ---
 .vscode/
 !.vscode/extensions.json
 *.code-workspace
 
-# --- Sistema Operacional (Lixo de SO) ---
+# --- Sistema Operacional ---
 .DS_Store
 Thumbs.db
 
-# --- Python (Caso você use scripts auxiliares) ---
+# --- Python ---
 _pycache_/
 *.py[cod]
 *$py.class
@@ -15,7 +15,7 @@ venv/
 .venv/
 env/
 
-# --- Dependências Node.js (Padrão, caso use JS no futuro) ---
+# --- Dependências Node.js ---
 node_modules/
 npm-debug.log*
 yarn-debug.log*
