@@ -1,0 +1,23 @@
+[
+  {
+    "_id": 1,
+    "nome": "Brasileirão",
+    "premiacao": 50000000,
+    "organizador": "CBF",
+    "ano": 2025
+  },
+  {
+    "_id": 2,
+    "nome": "Copa do Brasil",
+    "premiacao": 70000000,
+    "organizador": "CBF",
+    "ano": 2025
+  },
+  {
+    "_id": 3,
+    "nome": "Libertadores",
+    "premiacao": 90000000,
+    "organizador": "CONMEBOL",
+    "ano": 2025
+  }
+]

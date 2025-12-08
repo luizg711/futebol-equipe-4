@@ -1,0 +1,58 @@
+[
+  {
+    "_id": 1,
+    "nome": "Sport",
+    "estado": "PE",
+    "fundacao": 1905,
+    "titulos": ["Brasileirão", "Copa do Brasil"],
+    "socios": 23190
+  },
+  {
+    "_id": 2,
+    "nome": "Palmeiras",
+    "estado": "SP",
+    "fundacao": 1914,
+    "titulos": ["Brasileirão", "Libertadores"],
+    "socios": 184712
+  },
+  {
+    "_id": 3,
+    "nome": "Vasco",
+    "estado": "RJ",
+    "fundacao": 1898,
+    "titulos": ["Brasileirão", "Libertadores"],
+    "socios": 44115
+  },
+  {
+    "_id": 4,
+    "nome": "Grêmio",
+    "estado": "RS",
+    "fundacao": 1903,
+    "titulos": ["Libertadores", "Copa do Brasil"],
+    "socios": 112000
+  },
+  {
+    "_id": 5,
+    "nome": "Corinthians",
+    "estado": "SP",
+    "fundacao": 1910,
+    "titulos": ["Brasileirão", "Libertadores", "Mundial", "Copa do Brasil"],
+    "socios": 154000
+  },
+  {
+    "_id": 6,
+    "nome": "São Paulo",
+    "estado": "SP",
+    "fundacao": 1930,
+    "titulos": ["Brasileirão", "Libertadores", "Mundial", "Copa do Brasil"],
+    "socios": 54000
+  },
+  {
+    "_id": 7,
+    "nome": "Atlético Mineiro",
+    "estado": "MG",
+    "fundacao": 1908,
+    "titulos": ["Brasileirão", "Libertadores", "Copa do Brasil"],
+    "socios": 85000
+  }
+]
