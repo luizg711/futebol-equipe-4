@@ -4,37 +4,37 @@ use('futebol_brasileiro');
 // --- CONSULTAS SIMPLES ---
 
 // 2 find: Jogadores do time 1
-[cite_start]db.jogadores.find({ time_id: 1 }); [cite: 7]
+db.jogadores.find({ time_id: 1 });
 
 // 3 size: Jogadores com exatamente 2 posições
-[cite_start]db.jogadores.find({ posicoes: { $size: 2 } }); [cite: 7]
+db.jogadores.find({ posicoes: { $size: 2 } });
 
 // 7 gte: Jogadores com altura >= 1.75
-[cite_start]db.jogadores.find({ altura: { $gte: 1.75 } }); [cite: 9]
+db.jogadores.find({ altura: { $gte: 1.75 } });
 
 // 10 count: Quantos jogadores no time 2
-[cite_start]db.jogadores.countDocuments({ time_id: 2 }); [cite: 9]
+db.jogadores.countDocuments({ time_id: 2 });
 
 // 13 exists: Jogadores que têm o campo 'assistencias'
-[cite_start]db.jogadores.find({ assistencias: { $exists: true } }); [cite: 10]
+db.jogadores.find({ assistencias: { $exists: true } });
 
 // 14 e 15 sort e limit: Top 3 artilheiros
-[cite_start]db.jogadores.find().sort({ gols: -1 }).limit(3); [cite: 10]
+db.jogadores.find().sort({ gols: -1 }).limit(3);
 
 // 20 all: Jogadores que são Atacante E Ponta
-[cite_start]db.jogadores.find({ posicoes: { $all: ["Atacante", "Ponta"] } }); [cite: 12]
+db.jogadores.find({ posicoes: { $all: ["Atacante", "Ponta"] } });
 
 // 19 pretty: Visualizar formatação
-[cite_start]db.times.find().limit(1).pretty(); [cite: 12]
+db.times.find().limit(1).pretty();
 
 // 23 search e 22 text: Busca textual por "Ponta"
-[cite_start]db.jogadores.find({ $text: { $search: "Ponta" } }); [cite: 19]
+db.jogadores.find({ $text: { $search: "Ponta" } });
 
 // 30 findOne: Buscar campeonato específico
-[cite_start]db.campeonatos.findOne({ nome: "Brasileirão" }); [cite: 11]
+db.campeonatos.findOne({ nome: "Brasileirão" });
 
 // $where: Assistências maior que gols (Consultas com JavaScript)
-[cite_start]db.jogadores.find({ $where: "this.assistencias > this.gols" }); [cite: 11]
+db.jogadores.find({ $where: "this.assistencias > this.gols" });
 
 
 // --- AGGREGATIONS ---
@@ -42,7 +42,7 @@ use('futebol_brasileiro');
 // 6 project: Apenas nome e gols
 db.jogadores.aggregate([
   { $project: { _id: 0, nome_jogador: "$nome", gols: 1 } }
-[cite_start]]); [cite: 8]
+]);
 
 // 4 aggregate (Lookup, Match, Group, Sum, Avg, Max, Cond)
 // Este cobre os itens: 29, 5, 8, 9, 12, 11, 28
@@ -67,7 +67,7 @@ db.jogadores.aggregate([
         }
     }
   }
-[cite_start]]); [cite: 13, 14, 15]
+]);
 
 // 24 filter: Filtrar títulos do array dentro do aggregate
 db.times.aggregate([
@@ -83,33 +83,33 @@ db.times.aggregate([
       }
     }
   }
-[cite_start]]); [cite: 20]
+]);
 
 
 // --- UPDATES E MANUTENÇÃO ---
 
 // 25 e 21 updateOne e set
-[cite_start]db.jogadores.updateOne({ nome: "Victor Roque" }, { $set: { altura: 1.74 } }); [cite: 16]
-[cite_start]db.jogadores.updateOne({ nome: "Veiga" }, { $set: { altura: 1.76 } }); [cite: 17]
+db.jogadores.updateOne({ nome: "Victor Roque" }, { $set: { altura: 1.74 } });
+db.jogadores.updateOne({ nome: "Veiga" }, { $set: { altura: 1.76 } });
 
 // 31 addToSet: Adicionar título sem duplicar
-[cite_start]db.times.updateOne({ nome: "Sport"}, { $addToSet: { titulos: "Brasileirão série B" } }); [cite: 18]
+db.times.updateOne({ nome: "Sport"}, { $addToSet: { titulos: "Brasileirão série B" } });
 
 // 27 renameCollection
 db.campeonatos.renameCollection("torneios");
-[cite_start]db.torneios.renameCollection("campeonatos"); [cite: 21]
+db.torneios.renameCollection("campeonatos");
 
 
 // --- MAP REDUCE (LEGADO) ---
 // 17 e 18 MapReduce
-var mapJogadores = function() { emit(this.time_id, this.gols); [cite_start]}; [cite: 21]
-var reduceGols = function(timeId, gols) { return Array.sum(gols); [cite_start]}; [cite: 22]
+var mapJogadores = function() { emit(this.time_id, this.gols); };
+var reduceGols = function(timeId, gols) { return Array.sum(gols); };
 
 db.jogadores.mapReduce(
    mapJogadores,
    reduceGols,
    { out: "resumo_gols_mapreduce" }
-[cite_start]); [cite: 23]
+);
 
 // Ver resultado do MapReduce
-[cite_start]db.resumo_gols_mapreduce.find(); [cite: 23]
+db.resumo_gols_mapreduce.find();
