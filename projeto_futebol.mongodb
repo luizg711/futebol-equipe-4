@@ -12,6 +12,15 @@ db.times.insertMany([
     {_id: 3, nome: "Vasco", estado: "RJ", fundacao: 1898, titulos: ["Brasileirão", "Libertadores"], socios: 44115 }
 ]);
 
+db.times.insertOne({
+    _id: 4, 
+    nome: "Grêmio", 
+    estado: "RS", 
+    fundacao: 1903, 
+    titulos: ["Libertadores", "Copa do Brasil"], 
+    socios: 112000
+});
+
 db.jogadores.insertMany([
   { nome: "Pablo", time_id: 1, posicoes: ["Atacante"], gols: 25, assistencias: 5, altura: 1.85 },
   { nome: "Lucas Lima", time_id: 1, posicoes: ["Meio-campo", "Ponta"], gols: 12, assistencias: 15, altura: 1.75 },
@@ -51,6 +60,23 @@ db.jogadores.find({ altura: { $gte: 1.75 } });
 //10 count
 db.jogadores.countDocuments({ time_id: 2 });
 
+//13 exists
+db.jogadores.find({ assistencias: { $exists: true } });
+
+//14 e 15, sort e limit
+db.jogadores.find().sort({ gols: -1 }).limit(3);
+
+db.jogadores.find({ $where: "this.assistencias > this.gols" });
+
+//30 findone
+db.campeonatos.findOne({ nome: "Brasileirão" });
+
+//20 all 
+db.jogadores.find({ posicoes: { $all: ["Atacante", "Ponta"] } });
+
+//19 pretty
+db.times.find().limit(1).pretty();
+
 //4 aggregate
 db.jogadores.aggregate([
   {
@@ -79,7 +105,7 @@ db.jogadores.aggregate([
     }
   },
   {
-    // 24 e 28 filter e cond
+    //28 filter e cond
     $project: {
         total_gols: 1,
         classificacao: {
@@ -105,3 +131,46 @@ db.times.updateOne(
   { nome: "Sport"},
   { $addToSet: { titulos: "Brasileirão série B" } }
 );
+
+//23 search e 22 text
+db.jogadores.find({ $text: { $search: "Ponta" } });
+
+//24 filter
+db.times.aggregate([
+  {
+    $project: {
+      nome: 1,
+      titulos_nacionais: {
+        $filter: {
+          input: "$titulos", 
+          as: "titulo",
+          cond: { $regexMatch: { input: "$$titulo", regex: "Brasileirão" } }
+        }
+      }
+    }
+  }
+]);
+
+//27 renamecollection
+db.campeonatos.renameCollection("torneios");
+
+//voltando pro nome original
+db.torneios.renameCollection("campeonatos");
+
+//17 mapreduce e 18 function
+var mapJogadores = function() {
+   emit(this.time_id, this.gols);
+};
+
+var reduceGols = function(timeId, gols) {
+   return Array.sum(gols);
+};
+
+db.jogadores.mapReduce(
+   mapJogadores,
+   reduceGols,
+   { out: "resumo_gols_mapreduce" }
+);
+
+//Ver resultado do MapReduce
+db.resumo_gols_mapreduce.find();
