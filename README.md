@@ -16,6 +16,19 @@ O objetivo é modelar um banco de dados NoSQL para gerenciar campeonatos, times 
 * **MongoDB Atlas** (Banco na Nuvem)
 * **VS Code** (Playground para scripts)
 
+## 📂 Estrutura do Projeto
+A organização dos arquivos foi dividida para separar a carga de dados das consultas:
+
+```text
+/
+├── .gitignore               # Arquivos ignorados pelo Git
+├── README.md                # Documentação do projeto
+└── projeto_futebol/         # Pasta principal dos scripts
+    ├── setup.mongodb        # 1. Script de limpeza e carga inicial (Seed)
+    └── queries.mongodb      # 2. Script de consultas, agregações e testes
+
+
+```
 ## 📋 Checklist Implementado
 O projeto cobre 31 itens obrigatórios, incluindo:
 - [x] CRUD Completo (Insert, Update, Delete, Find)
@@ -26,4 +39,6 @@ O projeto cobre 31 itens obrigatórios, incluindo:
 ## 🚀 Como rodar
 1. Instale a extensão "MongoDB for VS Code".
 2. Configure sua Connection String.
-3. Abra o arquivo `projeto_futebol.mongodb` e clique no botão "Play".
+3. Abra a pasta projeto_futebol no seu VS Code.
+4. Execute primeiro o arquivo setup.mongodb (clique no botão "Play" no canto superior direito) para criar e popular o banco.
+5. Em seguida, execute o arquivo queries.mongodb para rodar as consultas e validações do checklist.
