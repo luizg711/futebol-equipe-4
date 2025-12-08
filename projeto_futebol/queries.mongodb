@@ -1,0 +1,115 @@
+// 02_queries.mongodb
+use('futebol_brasileiro');
+
+// --- CONSULTAS SIMPLES ---
+
+// 2 find: Jogadores do time 1
+[cite_start]db.jogadores.find({ time_id: 1 }); [cite: 7]
+
+// 3 size: Jogadores com exatamente 2 posições
+[cite_start]db.jogadores.find({ posicoes: { $size: 2 } }); [cite: 7]
+
+// 7 gte: Jogadores com altura >= 1.75
+[cite_start]db.jogadores.find({ altura: { $gte: 1.75 } }); [cite: 9]
+
+// 10 count: Quantos jogadores no time 2
+[cite_start]db.jogadores.countDocuments({ time_id: 2 }); [cite: 9]
+
+// 13 exists: Jogadores que têm o campo 'assistencias'
+[cite_start]db.jogadores.find({ assistencias: { $exists: true } }); [cite: 10]
+
+// 14 e 15 sort e limit: Top 3 artilheiros
+[cite_start]db.jogadores.find().sort({ gols: -1 }).limit(3); [cite: 10]
+
+// 20 all: Jogadores que são Atacante E Ponta
+[cite_start]db.jogadores.find({ posicoes: { $all: ["Atacante", "Ponta"] } }); [cite: 12]
+
+// 19 pretty: Visualizar formatação
+[cite_start]db.times.find().limit(1).pretty(); [cite: 12]
+
+// 23 search e 22 text: Busca textual por "Ponta"
+[cite_start]db.jogadores.find({ $text: { $search: "Ponta" } }); [cite: 19]
+
+// 30 findOne: Buscar campeonato específico
+[cite_start]db.campeonatos.findOne({ nome: "Brasileirão" }); [cite: 11]
+
+// $where: Assistências maior que gols (Consultas com JavaScript)
+[cite_start]db.jogadores.find({ $where: "this.assistencias > this.gols" }); [cite: 11]
+
+
+// --- AGGREGATIONS ---
+
+// 6 project: Apenas nome e gols
+db.jogadores.aggregate([
+  { $project: { _id: 0, nome_jogador: "$nome", gols: 1 } }
+[cite_start]]); [cite: 8]
+
+// 4 aggregate (Lookup, Match, Group, Sum, Avg, Max, Cond)
+// Este cobre os itens: 29, 5, 8, 9, 12, 11, 28
+db.jogadores.aggregate([
+  {
+    $lookup: { from: "times", localField: "time_id", foreignField: "_id", as: "time_info" }
+  },
+  { $match: { gols: { $gt: 5 } } },
+  {
+    $group: {
+      _id: "$time_id", 
+      total_gols: { $sum: "$gols" },
+      media_altura: { $avg: "$altura" },
+      max_assist: { $max: "$assistencias" }
+    }
+  },
+  {
+    $project: {
+        total_gols: 1,
+        classificacao: {
+            $cond: { if: { $gte: ["$total_gols", 30] }, then: "Ataque Matador", else: "Ataque Comum" }
+        }
+    }
+  }
+[cite_start]]); [cite: 13, 14, 15]
+
+// 24 filter: Filtrar títulos do array dentro do aggregate
+db.times.aggregate([
+  {
+    $project: {
+      nome: 1,
+      titulos_nacionais: {
+        $filter: {
+          input: "$titulos", 
+          as: "titulo",
+          cond: { $regexMatch: { input: "$$titulo", regex: "Brasileirão" } }
+        }
+      }
+    }
+  }
+[cite_start]]); [cite: 20]
+
+
+// --- UPDATES E MANUTENÇÃO ---
+
+// 25 e 21 updateOne e set
+[cite_start]db.jogadores.updateOne({ nome: "Victor Roque" }, { $set: { altura: 1.74 } }); [cite: 16]
+[cite_start]db.jogadores.updateOne({ nome: "Veiga" }, { $set: { altura: 1.76 } }); [cite: 17]
+
+// 31 addToSet: Adicionar título sem duplicar
+[cite_start]db.times.updateOne({ nome: "Sport"}, { $addToSet: { titulos: "Brasileirão série B" } }); [cite: 18]
+
+// 27 renameCollection
+db.campeonatos.renameCollection("torneios");
+[cite_start]db.torneios.renameCollection("campeonatos"); [cite: 21]
+
+
+// --- MAP REDUCE (LEGADO) ---
+// 17 e 18 MapReduce
+var mapJogadores = function() { emit(this.time_id, this.gols); [cite_start]}; [cite: 21]
+var reduceGols = function(timeId, gols) { return Array.sum(gols); [cite_start]}; [cite: 22]
+
+db.jogadores.mapReduce(
+   mapJogadores,
+   reduceGols,
+   { out: "resumo_gols_mapreduce" }
+[cite_start]); [cite: 23]
+
+// Ver resultado do MapReduce
+[cite_start]db.resumo_gols_mapreduce.find(); [cite: 23]
