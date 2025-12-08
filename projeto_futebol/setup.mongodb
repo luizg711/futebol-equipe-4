@@ -1,0 +1,62 @@
+// 01_setup.mongodb
+
+// Seleciona o banco de dados
+[cite_start]use('futebol_brasileiro'); [cite: 1]
+
+// Limpa as collections anteriores para evitar duplicatas
+[cite_start]db.times.drop(); [cite: 1]
+[cite_start]db.jogadores.drop(); [cite: 1]
+[cite_start]db.campeonatos.drop(); [cite: 1]
+
+// --- INSERTS (Carga de Dados) ---
+
+// Inserindo Times
+db.times.insertMany([
+    {_id: 1, nome: "Sport", estado: "PE", fundacao: 1905, titulos: ["Brasileirão", "Copa do Brasil"], socios: 23190},
+    {_id: 2, nome: "Palmeiras", estado: "SP", fundacao: 1914, titulos: ["Brasileirão", "Libertadores"], socios: 184712 },
+    {_id: 3, nome: "Vasco", estado: "RJ", fundacao: 1898, titulos: ["Brasileirão", "Libertadores"], socios: 44115 }
+[cite_start]]); [cite: 1]
+
+db.times.insertOne({
+    _id: 4, 
+    nome: "Grêmio", 
+    estado: "RS", 
+    fundacao: 1903, 
+    titulos: ["Libertadores", "Copa do Brasil"], 
+    socios: 112000
+[cite_start]}); [cite: 2]
+
+db.times.insertMany([
+  { _id: 5, nome: "Corinthians", estado: "SP", fundacao: 1910, titulos: ["Brasileirão", "Libertadores", "Mundial", "Copa do Brasil"], socios: 154000},
+  { _id: 6, nome: "São Paulo", estado: "SP", fundacao: 1930, titulos: ["Brasileirão", "Libertadores", "Mundial", "Copa do Brasil"], socios: 54000 },
+  { _id: 7, nome: "Atlético Mineiro", estado: "MG", fundacao: 1908, titulos: ["Brasileirão", "Libertadores", "Copa do Brasil"], socios: 85000}
+[cite_start]]); [cite: 3]
+
+// Inserindo Jogadores
+db.jogadores.insertMany([
+  { nome: "Pablo", time_id: 1, posicoes: ["Atacante"], gols: 25, assistencias: 5, altura: 1.85 },
+  { nome: "Lucas Lima", time_id: 1, posicoes: ["Meio-campo", "Ponta"], gols: 12, assistencias: 15, altura: 1.75 },
+  { nome: "Victor Roque", time_id: 2, posicoes: ["Atacante", "Ponta"], gols: 10, assistencias: 4, altura: 1.66 },
+  { nome: "Veiga", time_id: 2, posicoes: ["Meio-campo"], gols: 18, assistencias: 10, altura: 1.75 },
+  { nome: "Philippe Coutinho", time_id: 3, posicoes: ["Meio-campo", "Ponta"], gols: 2, assistencias: 2, altura: 1.72 }
+[cite_start]]); [cite: 4]
+
+db.jogadores.insertMany([
+  {nome: "Hulk",time_id: 7,posicoes: ["Atacante"],gols: 30,assistencias: 12,altura: 1.80},
+  {nome: "Paulinho",time_id: 7,posicoes: ["Atacante", "Ponta"],gols: 20,assistencias: 5,altura: 1.77},
+  {nome: "Yuri Alberto",time_id: 5,posicoes: ["Atacante"],gols: 15,assistencias: 7, altura: 1.82},
+  {nome: "Luciano",time_id: 6,posicoes: ["Atacante"],gols: 22,assistencias: 3, altura: 1.79},
+  {nome: "Lucas Moura",time_id: 6,posicoes: ["Meio-campo", "Ponta"],gols: 10,assistencias: 8, altura: 1.74}
+[cite_start]]); [cite: 5]
+
+// Inserindo Campeonatos
+db.campeonatos.insertMany([
+  { _id: 1, nome: "Brasileirão", premiacao: 50000000, organizador: "CBF", ano: 2025 },
+  { _id: 2, nome: "Copa do Brasil", premiacao: 70000000, organizador: "CBF", ano: 2025 },
+  { _id: 3, nome: "Libertadores", premiacao: 90000000, organizador: "CONMEBOL", ano: 2025 }
+[cite_start]]); [cite: 6]
+
+// Criando Índices
+[cite_start]db.jogadores.createIndex({ nome: "text", posicoes: "text" }); [cite: 7]
+
+console.log("Banco de dados criado e populado com sucesso!");
