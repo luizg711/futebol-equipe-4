@@ -23,7 +23,11 @@ A organização dos arquivos foi dividida para separar a carga de dados das cons
 /
 ├── .gitignore               # Arquivos ignorados pelo Git
 ├── README.md                # Documentação do projeto
-└── projeto_futebol/         # Pasta principal dos scripts
+├── datasets/                # Dados brutos em JSON (para referência ou importação externa)
+│   ├── times.json
+│   ├── jogadores.json
+│   └── campeonatos.json
+└── projeto_futebol/         # Pasta principal dos scripts (Execução no VS Code)
     ├── setup.mongodb        # 1. Script de limpeza e carga inicial (Seed)
     └── queries.mongodb      # 2. Script de consultas, agregações e testes
 
@@ -42,3 +46,7 @@ O projeto cobre 31 itens obrigatórios, incluindo:
 3. Abra a pasta projeto_futebol no seu VS Code.
 4. Execute primeiro o arquivo setup.mongodb (clique no botão "Play" no canto superior direito) para criar e popular o banco.
 5. Em seguida, execute o arquivo queries.mongodb para rodar as consultas e validações do checklist.
+
+
+## Nota: 
+A pasta datasets/ contém os mesmos dados inseridos pelo script de setup, disponibilizados separadamente caso seja necessário utilizar ferramentas de importação como o mongoimport.
