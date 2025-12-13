@@ -1,6 +1,6 @@
 # ⚽ Projeto MongoDB - Futebol Brasileiro
 
-Projeto da disciplina de Gerenciamento de Dados (GDI) - 2023.1.
+Projeto da disciplina de Banco de Dados - 2025.2.
 O objetivo é modelar um banco de dados NoSQL para gerenciar campeonatos, times e jogadores.
 
 ## 👥 Equipe
